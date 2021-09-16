@@ -89,7 +89,7 @@ resource "null_resource" "postgresql_master_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -102,7 +102,7 @@ resource "null_resource" "postgresql_master_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -115,7 +115,7 @@ resource "null_resource" "postgresql_master_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -133,7 +133,7 @@ resource "null_resource" "postgresql_master_initdb" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -146,7 +146,7 @@ resource "null_resource" "postgresql_master_initdb" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -159,7 +159,7 @@ resource "null_resource" "postgresql_master_initdb" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -186,7 +186,7 @@ resource "null_resource" "postgresql_hotstandby1_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].public_ip_address
+      host        = data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -199,7 +199,7 @@ resource "null_resource" "postgresql_hotstandby1_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].public_ip_address
+      host        = data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -212,7 +212,7 @@ resource "null_resource" "postgresql_hotstandby1_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].public_ip_address
+      host        = data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -239,7 +239,7 @@ resource "null_resource" "postgresql_hotstandby2_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].public_ip_address
+      host        = data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -252,7 +252,7 @@ resource "null_resource" "postgresql_hotstandby2_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].public_ip_address
+      host        = data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -265,7 +265,7 @@ resource "null_resource" "postgresql_hotstandby2_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].public_ip_address
+      host        = data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -285,7 +285,7 @@ resource "null_resource" "postgresql_master_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -299,7 +299,7 @@ resource "null_resource" "postgresql_master_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -312,7 +312,7 @@ resource "null_resource" "postgresql_master_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -325,7 +325,7 @@ resource "null_resource" "postgresql_master_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -344,7 +344,7 @@ resource "null_resource" "postgresql_master_setup2" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -357,7 +357,7 @@ resource "null_resource" "postgresql_master_setup2" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -370,7 +370,7 @@ resource "null_resource" "postgresql_master_setup2" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address : data.oci_core_vnic.postgresql_master_primaryvnic.public_ip_address
+      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -390,7 +390,7 @@ resource "null_resource" "postgresql_hotstandby1_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].public_ip_address
+      host        = data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -403,7 +403,7 @@ resource "null_resource" "postgresql_hotstandby1_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].public_ip_address
+      host        = data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -416,7 +416,7 @@ resource "null_resource" "postgresql_hotstandby1_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].public_ip_address
+      host        = data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -435,7 +435,7 @@ resource "null_resource" "postgresql_hotstandby2_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].public_ip_address
+      host        = data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -448,7 +448,7 @@ resource "null_resource" "postgresql_hotstandby2_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].public_ip_address
+      host        = data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address
       private_key = file(var.ssh_private_key)
 
     }
@@ -461,7 +461,7 @@ resource "null_resource" "postgresql_hotstandby2_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = var.create_in_private_subnet ? data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address : data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].public_ip_address
+      host        = data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address
       private_key = file(var.ssh_private_key)
 
     }

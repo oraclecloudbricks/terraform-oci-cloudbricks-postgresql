@@ -28,46 +28,83 @@ variable "private_key_path" {
 /********** Provider Variables NOT OVERLOADABLE **********/
 
 /********** Brick Variables **********/
-variable "availablity_domain_name" {}
 
-variable "show_advanced" {
+variable "postgresql_master_ad" {
+  description = "The availability domain to provision the master instance in"
+}
+
+variable "postgresql_master_fd" {
+  description = "The fault domain to provision the master instance in"
+}
+
+variable "postgresql_master_shape" {
+  description = "The shape for the master instance to use"
+}
+
+variable "postgresql_master_is_flex_shape" {
+  description = "Boolean to determine if the master instance is flex or not"
   default = false
+  type = bool
 }
 
-variable "create_in_private_subnet" {
-  default = true
+variable "postgresql_master_ocpus" {
+  description = "The number of OCPUS for the master instance to use when flex shape is enabled"
+  default = ""
 }
 
-variable "release" {
-  description = "Reference Architecture Release (OCI Architecture Center)"
-  default     = "1.2"
+variable "postgresql_master_memory_in_gb" {
+  description = "The amount of memory in GB for the master instance to use when flex shape is enabled"
+  default = ""
 }
 
-variable "ssh_public_key" {
+variable "postgresql_hotstandby_shape" {
+ description = "The shape for the hotstandby instances to use"
 }
 
-variable "postgresql_vcn_cidr" {
-  default = "10.1.0.0/16"
+variable "postgresql_hotstandby_is_flex_shape" {
+  description = "Boolean to determine if the standy instances are flex or not"
+  default = false
+  type = bool
 }
 
-variable "postgresql_subnet_cidr" {
-  default = "10.1.20.0/24"
+variable "postgresql_hotstandby_ocpus" {
+  description = "The number of OCPUS for the flex instances to use when flex shape is enabled"
+  default = ""
 }
 
-variable "bastion_subnet_cidr" {
-  default = "10.1.21.0/24"
+variable "postgresql_hotstandby_memory_in_gb" {
+  description = "The amount of memory in GB for the standby instances to use when flex shape is enabled"
+  default = ""
 }
 
-variable "postgresql_instance_shape" {
-  default = "VM.Standard.E3.Flex"
+variable "postgresql_deploy_hotstandby1" {
+  description = "Boolean to determine if to provision hotstandby1"
+  default = false
+  type = bool
 }
 
-variable "postgresql_instance_flex_shape_ocpus" {
-  default = 1
+variable "postgresql_hotstandby1_ad" {
+  description = "The availability domain to provision the hoststandby1 instance in"
+  default = ""
 }
 
-variable "postgresql_instance_flex_shape_memory" {
-  default = 10
+variable "postgresql_hotstandby1_fd" {
+  description = "The fault domain to provision the hoststandby1 instance in"
+}
+
+variable "postgresql_deploy_hotstandby2" {
+  description = "Boolean to determine if to provision hotstandby2"
+  default = false
+  type = bool
+}
+
+variable "postgresql_hotstandby2_ad" {
+  description = "The availability domain to provision the hoststandby2 instance in"
+  default = ""
+}
+
+variable "postgresql_hotstandby2_fd" {
+  description = "The fault domain to provision the hoststandby2 instance in"
 }
 
 variable "instance_os" {
@@ -80,85 +117,26 @@ variable "linux_os_version" {
   default     = "7.9"
 }
 
-variable "postgresql_master_fd" {
-  default = "FAULT-DOMAIN-1"
-}
-
 variable "postgresql_replicat_username" {
+  description = "The username used in setup of PostgreSQL replication"
   default = "replicator"
 }
 
 variable "postgresql_password" {
-  default = ""
+  description = "The password used in setup of the PostgreSQL database"
 }
 
 variable "postgresql_version" {
-  default = "13"
+  description = "The version of PostgreSQL used in the setup"
 }
 
-variable "postgresql_deploy_hotstandby1" {
-  default = true
+variable "ssh_public_key" {
+  description = "Defines SSH Public Key to be used in order to remotely connect to compute instances"
 }
 
-variable "postgresql_hotstandby1_fd" {
-  default = "FAULT-DOMAIN-2"
+variable "ssh_private_key" {
+  description = "Defines SSH Private Key to be used in order to remotely connect to compute instances"
 }
-
-variable "postgresql_hotstandby1_ad" {
-  default = ""
-}
-
-variable "postgresql_hotstandby1_shape" {
-  default = "VM.Standard.E3.Flex"
-}
-
-variable "postgresql_hotstandby1_flex_shape_ocpus" {
-  default = 1
-}
-
-variable "postgresql_hotstandby1_flex_shape_memory" {
-  default = 10
-}
-
-variable "postgresql_deploy_hotstandby2" {
-  default = true
-}
-
-variable "postgresql_hotstandby2_fd" {
-  default = "FAULT-DOMAIN-3"
-}
-
-variable "postgresql_hotstandby2_ad" {
-  default = ""
-}
-
-variable "postgresql_hotstandby2_shape" {
-  default = "VM.Standard.E3.Flex"
-}
-
-variable "postgresql_hotstandby2_flex_shape_ocpus" {
-  default = 1
-}
-
-variable "postgresql_hotstandby2_flex_shape_memory" {
-  default = 10
-}
-
-# Dictionary Locals
-locals {
-  compute_flexible_shapes = [
-    "VM.Standard.E3.Flex",
-    "VM.Standard.E4.Flex"
-  ]
-}
-
-# Checks if is using Flexible Compute Shapes
-locals {
-  is_flexible_postgresql_instance_shape    = contains(local.compute_flexible_shapes, var.postgresql_instance_shape)
-  is_flexible_postgresql_hotstandby1_shape = contains(local.compute_flexible_shapes, var.postgresql_hotstandby1_shape)
-  is_flexible_postgresql_hotstandby2_shape = contains(local.compute_flexible_shapes, var.postgresql_hotstandby2_shape)
-}
-
 
 variable "linux_compute_instance_compartment_name" {
   description = "Defines the compartment name where the infrastructure will be created"
@@ -184,30 +162,20 @@ variable "compute_nsg_name" {
   description = "Name of the NSG associated to the compute"
 }
 
-
-variable "ssh_public_is_path" {
-  default = true
-
+variable "database_backup_policy_level" {
+  description = "Backup policy level for Database ISCSI disks"
 }
 
-variable "ssh_private_key" {
-
-}
-
-
-variable "backup_policy_level" {
-  description = "Backup policy level for ISCSI disks"
-  default     = "bronze"
-}
-
-variable "disk_size_in_gb" {
+variable "database_size_in_gb" {
   description = "Disk Capacity for Database"
-  default     = "85"
-
 }
 
 variable "vpus_per_gb" {
-  default = 10
+  description = "Disk VPUS for the Database"
+}
+
+variable "instance_backup_policy_level" {
+  description = "Backup policy level for instance boot volume disks"
 }
 
 /********** Brick Variables **********/

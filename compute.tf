@@ -18,29 +18,16 @@ data "template_cloudinit_config" "cloud_init" {
 }
 
 resource "oci_core_instance" "postgresql_master" {
-  availability_domain = var.availablity_domain_name
+  availability_domain = var.postgresql_master_ad
   compartment_id      = local.compartment_id
   display_name        = "PostgreSQL_Master"
-  shape               = var.postgresql_instance_shape
+  shape               = var.postgresql_master_shape
 
   dynamic "shape_config" {
-    for_each = local.is_flexible_postgresql_instance_shape ? [1] : []
+    for_each = var.postgresql_master_is_flex_shape ? [1] : []
     content {
-      memory_in_gbs = var.postgresql_instance_flex_shape_memory
-      ocpus         = var.postgresql_instance_flex_shape_ocpus
-    }
-  }
-
-  dynamic "agent_config" {
-    for_each = var.create_in_private_subnet ? [1] : []
-    content {
-      are_all_plugins_disabled = false
-      is_management_disabled   = false
-      is_monitoring_disabled   = false
-      plugins_config {
-        desired_state = "ENABLED"
-        name          = "Bastion"
-      }
+      ocpus         = var.postgresql_master_ocpus
+      memory_in_gbs = var.postgresql_master_memory_in_gb
     }
   }
 
@@ -49,46 +36,33 @@ resource "oci_core_instance" "postgresql_master" {
   create_vnic_details {
     subnet_id        = local.private_subnet_ocid
     display_name     = "primaryvnic"
-    assign_public_ip = var.create_in_private_subnet ? false : true
+    assign_public_ip = false
     hostname_label   = "pgmaster"
   }
 
   source_details {
     source_type = "image"
-    source_id   = data.oci_core_images.InstanceImageOCID_postgresql_instance_shape.images[0].id
+    source_id   = data.oci_core_images.InstanceImageOCID_postgresql_master_shape.images[0].id
   }
 
   metadata = {
-    ssh_authorized_keys = var.ssh_public_is_path ? file(var.ssh_public_key) : var.ssh_public_key
+    ssh_authorized_keys = file(var.ssh_public_key)
     user_data           = data.template_cloudinit_config.cloud_init.rendered
   }
 }
 
 resource "oci_core_instance" "postgresql_hotstandby1" {
-
-  availability_domain = var.postgresql_hotstandby1_ad == "" ? var.availablity_domain_name : var.postgresql_hotstandby1_ad
+  count = var.postgresql_deploy_hotstandby1 ? 1 : 0
+  availability_domain = var.postgresql_hotstandby1_ad == "" ? var.postgresql_master_ad : var.postgresql_hotstandby1_ad
   compartment_id      = local.compartment_id
   display_name        = "PostgreSQL_HotStandby1"
-  shape               = var.postgresql_hotstandby1_shape
+  shape               = var.postgresql_hotstandby_shape
 
   dynamic "shape_config" {
-    for_each = local.is_flexible_postgresql_hotstandby1_shape ? [1] : []
+    for_each = var.postgresql_hotstandby_is_flex_shape ? [1] : []
     content {
-      memory_in_gbs = var.postgresql_hotstandby1_flex_shape_memory
-      ocpus         = var.postgresql_hotstandby1_flex_shape_ocpus
-    }
-  }
-
-  dynamic "agent_config" {
-    for_each = var.create_in_private_subnet ? [1] : []
-    content {
-      are_all_plugins_disabled = false
-      is_management_disabled   = false
-      is_monitoring_disabled   = false
-      plugins_config {
-        desired_state = "ENABLED"
-        name          = "Bastion"
-      }
+      ocpus         = var.postgresql_hotstandby_ocpus
+      memory_in_gbs = var.postgresql_hotstandby_memory_in_gb
     }
   }
 
@@ -97,13 +71,13 @@ resource "oci_core_instance" "postgresql_hotstandby1" {
   create_vnic_details {
     subnet_id        = local.private_subnet_ocid
     display_name     = "primaryvnic"
-    assign_public_ip = var.create_in_private_subnet ? false : true
+    assign_public_ip = false
     hostname_label   = "pgstandby1"
   }
 
   source_details {
     source_type = "image"
-    source_id   = data.oci_core_images.InstanceImageOCID_postgresql_hotstandby1_shape.images[0].id
+    source_id   = data.oci_core_images.InstanceImageOCID_postgresql_hotstandby_shape.images[0].id
   }
 
   connection {
@@ -114,35 +88,22 @@ resource "oci_core_instance" "postgresql_hotstandby1" {
   }
 
   metadata = {
-    ssh_authorized_keys = var.ssh_public_is_path ? file(var.ssh_public_key) : var.ssh_public_key
+    ssh_authorized_keys = file(var.ssh_public_key)
   }
 }
 
 resource "oci_core_instance" "postgresql_hotstandby2" {
-
-  availability_domain = var.postgresql_hotstandby2_ad == "" ? var.availablity_domain_name : var.postgresql_hotstandby2_ad
+  count = var.postgresql_deploy_hotstandby2 ? 1 : 0
+  availability_domain = var.postgresql_hotstandby2_ad == "" ? var.postgresql_master_ad : var.postgresql_hotstandby2_ad
   compartment_id      = local.compartment_id
   display_name        = "PostgreSQL_HotStandby2"
-  shape               = var.postgresql_hotstandby2_shape
+  shape               = var.postgresql_hotstandby_shape
 
   dynamic "shape_config" {
-    for_each = local.is_flexible_postgresql_hotstandby2_shape ? [1] : []
+    for_each = var.postgresql_hotstandby_is_flex_shape ? [1] : []
     content {
-      memory_in_gbs = var.postgresql_hotstandby2_flex_shape_memory
-      ocpus         = var.postgresql_hotstandby2_flex_shape_ocpus
-    }
-  }
-
-  dynamic "agent_config" {
-    for_each = var.create_in_private_subnet ? [1] : []
-    content {
-      are_all_plugins_disabled = false
-      is_management_disabled   = false
-      is_monitoring_disabled   = false
-      plugins_config {
-        desired_state = "ENABLED"
-        name          = "Bastion"
-      }
+      ocpus         = var.postgresql_hotstandby_ocpus
+      memory_in_gbs = var.postgresql_hotstandby_memory_in_gb
     }
   }
 
@@ -151,13 +112,13 @@ resource "oci_core_instance" "postgresql_hotstandby2" {
   create_vnic_details {
     subnet_id        = local.private_subnet_ocid
     display_name     = "primaryvnic"
-    assign_public_ip = var.create_in_private_subnet ? false : true
+    assign_public_ip = false
     hostname_label   = "pgstandby2"
   }
 
   source_details {
     source_type = "image"
-    source_id   = data.oci_core_images.InstanceImageOCID_postgresql_hotstandby2_shape.images[0].id
+    source_id   = data.oci_core_images.InstanceImageOCID_postgresql_hotstandby_shape.images[0].id
   }
 
   connection {
@@ -168,6 +129,21 @@ resource "oci_core_instance" "postgresql_hotstandby2" {
   }
 
   metadata = {
-    ssh_authorized_keys = var.ssh_public_is_path ? file(var.ssh_public_key) : var.ssh_public_key
+    ssh_authorized_keys = file(var.ssh_public_key)
   }
+}
+
+resource "oci_core_volume_backup_policy_assignment" "backup_policy_assignment_postgresql_master" {
+  asset_id  = oci_core_instance.postgresql_master.boot_volume_id
+  policy_id = local.instance_backup_policy_id
+}
+
+resource "oci_core_volume_backup_policy_assignment" "backup_policy_assignment_postgresql_hotstandby1" {
+  asset_id  = oci_core_instance.postgresql_hotstandby1[0].boot_volume_id
+  policy_id = local.instance_backup_policy_id
+}
+
+resource "oci_core_volume_backup_policy_assignment" "backup_policy_assignment_postgresql_hotstandby2" {
+  asset_id  = oci_core_instance.postgresql_hotstandby2[0].boot_volume_id
+  policy_id = local.instance_backup_policy_id
 }
