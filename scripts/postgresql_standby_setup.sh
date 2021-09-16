@@ -28,8 +28,6 @@ sudo -u root bash -c "rm -rf $DATA_DIR/*"
 
 sudo su - postgres -c "export PGPASSWORD=${pg_replicat_password}; /usr/pgsql-${pg_version}/bin/pg_basebackup -D $DATA_DIR/ -h ${pg_master_ip} -X stream -c fast -U ${pg_replicat_username}"
 
-
-
 # Update the content of recovery.conf
 if [[ $pg_version == "13" ]]; then 
 	touch $DATA_DIR/standby.signal
@@ -50,11 +48,14 @@ else
     sudo -u root bash -c "chown postgres $DATA_DIR/recovery.conf"
 fi
 
+if [[ $pg_version == "13" ]]; then 
+  sudo chmod -R 750 /u01
+else 
+  sudo chmod -R 700 /u01
+fi
+
 # Restart of PostrgreSQL service
-sudo chmod -R 750 /u01
 sudo systemctl enable postgresql
 sudo systemctl stop postgresql
 sudo systemctl start postgresql
 sudo systemctl status postgresql
-
-

@@ -17,19 +17,15 @@ EOF
 
 # Optionally initialize the database and enable automatic start:
 if [[ $pg_version == "9.6" ]]; then 
-	#sudo /usr/pgsql-${pg_version}/bin/postgresql${pg_version_no_dot}-setup initdb -D /u01/data
 	sudo su - postgres -c  "/usr/pgsql-${pg_version}/bin/initdb -D $DATA_DIR"
 	sudo semanage fcontext -a -t postgresql_db_t "/u01/data(/.*)?"
 	sudo restorecon -R -v /u01/data
-
-
 else
-	#sudo /usr/pgsql-${pg_version}/bin/postgresql-${pg_version_no_dot}-setup initdb -D /u01/data
 	sudo su - postgres -c  "/usr/pgsql-${pg_version}/bin/initdb -D $DATA_DIR"
 	sudo semanage fcontext -a -t postgresql_db_t "/u01/data(/.*)?"
 	sudo restorecon -R -v /u01/data
-	
 fi	
+
 #sudo systemctl enable postgresql-${pg_version}
 #sudo systemctl start postgresql-${pg_version}
 #sudo systemctl status postgresql-${pg_version}

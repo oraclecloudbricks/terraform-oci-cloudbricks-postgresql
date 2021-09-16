@@ -3,8 +3,6 @@
 export pg_version='${pg_version}'
 export DATA_DIR="/u01/data"
 
-
-
 # Setting firewall rules
 sudo -u root bash -c "firewall-cmd --permanent --zone=trusted --add-source=${pg_hotstandby_ip}/32"
 sudo -u root bash -c "firewall-cmd --permanent --zone=trusted --add-port=5432/tcp"
@@ -19,4 +17,3 @@ sudo -u root bash -c "chown postgres $DATA_DIR/pg_hba.conf"
 sudo systemctl stop postgresql
 sudo systemctl start postgresql
 sudo systemctl status postgresql
-
