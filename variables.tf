@@ -1,11 +1,33 @@
-## Copyright © 2020, Oracle and/or its affiliates. 
-## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+# variables.tf 
+#
+# Purpose: The following file declares all variables used in this backend repository
 
-variable "tenancy_ocid" {}
-variable "user_ocid" {}
-variable "fingerprint" {}
-variable "private_key_path" {}
-variable "region" {}
+/********** Provider Variables NOT OVERLOADABLE **********/
+variable "region" {
+  description = "Target region where artifacts are going to be created"
+}
+
+variable "tenancy_ocid" {
+  description = "OCID of tenancy"
+}
+
+variable "user_ocid" {
+  description = "User OCID in tenancy. Currently hardcoded to user denny.alquinta@oracle.com"
+}
+
+variable "fingerprint" {
+  description = "API Key Fingerprint for user_ocid derived from public API Key imported in OCI User config"
+}
+
+variable "private_key_path" {
+  description = "Private Key Absolute path location where terraform is executed"
+}
+
+/********** Provider Variables NOT OVERLOADABLE **********/
+
+/********** Brick Variables **********/
 variable "availablity_domain_name" {}
 
 variable "show_advanced" {
@@ -187,3 +209,5 @@ variable "disk_size_in_gb" {
 variable "vpus_per_gb" {
   default = 10
 }
+
+/********** Brick Variables **********/

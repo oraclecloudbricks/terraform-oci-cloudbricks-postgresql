@@ -1,5 +1,10 @@
-## Copyright © 2020, Oracle and/or its affiliates. 
-## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+# blockstorage.tf
+#
+# Purpose: The following script defines the declaration of computes needed for the PostgreSQL deployment
+# Registry: https://registry.terraform.io/providers/hashicorp/oci/latest/docs/resources/core_instance
+
 
 data "template_cloudinit_config" "cloud_init" {
   gzip          = true
@@ -87,7 +92,6 @@ resource "oci_core_instance" "postgresql_hotstandby1" {
     }
   }
 
-
   fault_domain = var.postgresql_hotstandby1_fd
 
   create_vnic_details {
@@ -112,7 +116,6 @@ resource "oci_core_instance" "postgresql_hotstandby1" {
   metadata = {
     ssh_authorized_keys = var.ssh_public_is_path ? file(var.ssh_public_key) : var.ssh_public_key
   }
-
 }
 
 resource "oci_core_instance" "postgresql_hotstandby2" {
@@ -129,7 +132,6 @@ resource "oci_core_instance" "postgresql_hotstandby2" {
       ocpus         = var.postgresql_hotstandby2_flex_shape_ocpus
     }
   }
-
 
   dynamic "agent_config" {
     for_each = var.create_in_private_subnet ? [1] : []
@@ -168,6 +170,4 @@ resource "oci_core_instance" "postgresql_hotstandby2" {
   metadata = {
     ssh_authorized_keys = var.ssh_public_is_path ? file(var.ssh_public_key) : var.ssh_public_key
   }
-
-
 }

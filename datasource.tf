@@ -1,5 +1,9 @@
-## Copyright © 2020, Oracle and/or its affiliates. 
-## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+# datasource.tf
+#
+# Purpose: The following script defines the lookup logic used in code to obtain pre-created or JIT-created resources in tenancy.
+
 
 data "oci_core_vnic_attachments" "postgresql_master_vnics" {
   compartment_id      = local.compartment_id

@@ -1,5 +1,9 @@
-## Copyright © 2020, Oracle and/or its affiliates. 
-## All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
+# remote.tf
+#
+# Purpose: The following script remotely executes all the setup scripts on the PostgreSQL compute instances
+
 
 data "template_file" "postgresql_install_binaries_sh" {
   template = file("scripts/postgresql_install_binaries.sh")
