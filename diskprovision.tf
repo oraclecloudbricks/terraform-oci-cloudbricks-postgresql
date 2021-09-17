@@ -149,7 +149,7 @@ resource "null_resource" "mount_disk_exec_master" {
 
 
 resource "null_resource" "provisioning_disk_hotstandby1" {
-  count = var.postgresql_deploy_hotstandby1 ? 1 : 0
+  count      = var.postgresql_deploy_hotstandby1 ? 1 : 0
   depends_on = [oci_core_volume_attachment.ISCSIDiskAttachment_hotstandby1]
 
   connection {
@@ -174,7 +174,7 @@ resource "null_resource" "provisioning_disk_hotstandby1" {
 
 
 resource "null_resource" "partition_disk_hotstandby1" {
-  count = var.postgresql_deploy_hotstandby1 ? 1 : 0
+  count      = var.postgresql_deploy_hotstandby1 ? 1 : 0
   depends_on = [null_resource.provisioning_disk_hotstandby1]
 
   connection {
@@ -196,7 +196,7 @@ resource "null_resource" "partition_disk_hotstandby1" {
 
 
 resource "null_resource" "pvcreate_exec_hotstandby1" {
-  count = var.postgresql_deploy_hotstandby1 ? 1 : 0
+  count      = var.postgresql_deploy_hotstandby1 ? 1 : 0
   depends_on = [null_resource.partition_disk_hotstandby1]
   connection {
     type        = "ssh"
@@ -217,7 +217,7 @@ resource "null_resource" "pvcreate_exec_hotstandby1" {
 
 
 resource "null_resource" "vgcreate_exec_hotstandby1" {
-  count = var.postgresql_deploy_hotstandby1 ? 1 : 0
+  count      = var.postgresql_deploy_hotstandby1 ? 1 : 0
   depends_on = [null_resource.pvcreate_exec_hotstandby1]
   connection {
     type        = "ssh"
@@ -296,7 +296,7 @@ resource "null_resource" "mount_disk_exec_hotstandby1" {
 
 
 resource "null_resource" "provisioning_disk_hotstandby2" {
-  count = var.postgresql_deploy_hotstandby2 ? 1 : 0
+  count      = var.postgresql_deploy_hotstandby2 ? 1 : 0
   depends_on = [oci_core_volume_attachment.ISCSIDiskAttachment_hotstandby2]
 
   connection {
@@ -321,7 +321,7 @@ resource "null_resource" "provisioning_disk_hotstandby2" {
 
 
 resource "null_resource" "partition_disk_hotstandby2" {
-  count = var.postgresql_deploy_hotstandby2 ? 1 : 0
+  count      = var.postgresql_deploy_hotstandby2 ? 1 : 0
   depends_on = [null_resource.provisioning_disk_hotstandby2]
 
   connection {
@@ -343,7 +343,7 @@ resource "null_resource" "partition_disk_hotstandby2" {
 
 
 resource "null_resource" "pvcreate_exec_hotstandby2" {
-  count = var.postgresql_deploy_hotstandby2 ? 1 : 0
+  count      = var.postgresql_deploy_hotstandby2 ? 1 : 0
   depends_on = [null_resource.partition_disk_hotstandby2]
   connection {
     type        = "ssh"
@@ -364,7 +364,7 @@ resource "null_resource" "pvcreate_exec_hotstandby2" {
 
 
 resource "null_resource" "vgcreate_exec_hotstandby2" {
-  count = var.postgresql_deploy_hotstandby2 ? 1 : 0
+  count      = var.postgresql_deploy_hotstandby2 ? 1 : 0
   depends_on = [null_resource.pvcreate_exec_hotstandby2]
   connection {
     type        = "ssh"

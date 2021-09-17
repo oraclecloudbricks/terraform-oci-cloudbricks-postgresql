@@ -53,7 +53,7 @@ resource "oci_core_instance" "postgresql_master" {
 }
 
 resource "oci_core_instance" "postgresql_hotstandby1" {
-  count = var.postgresql_deploy_hotstandby1 ? 1 : 0
+  count               = var.postgresql_deploy_hotstandby1 ? 1 : 0
   availability_domain = var.postgresql_hotstandby1_ad == "" ? var.postgresql_master_ad : var.postgresql_hotstandby1_ad
   compartment_id      = local.compartment_id
   display_name        = var.postgresql_standyby1_name
@@ -95,7 +95,7 @@ resource "oci_core_instance" "postgresql_hotstandby1" {
 }
 
 resource "oci_core_instance" "postgresql_hotstandby2" {
-  count = var.postgresql_deploy_hotstandby2 ? 1 : 0
+  count               = var.postgresql_deploy_hotstandby2 ? 1 : 0
   availability_domain = var.postgresql_hotstandby2_ad == "" ? var.postgresql_master_ad : var.postgresql_hotstandby2_ad
   compartment_id      = local.compartment_id
   display_name        = var.postgresql_standyby2_name
@@ -137,16 +137,21 @@ resource "oci_core_instance" "postgresql_hotstandby2" {
 }
 
 resource "oci_core_volume_backup_policy_assignment" "backup_policy_assignment_postgresql_master" {
-  asset_id  = oci_core_instance.postgresql_master.boot_volume_id
-  policy_id = local.instance_backup_policy_id
+  depends_on = [oci_core_instance.postgresql_master]
+  asset_id   = oci_core_instance.postgresql_master.boot_volume_id
+  policy_id  = local.instance_backup_policy_id
 }
 
 resource "oci_core_volume_backup_policy_assignment" "backup_policy_assignment_postgresql_hotstandby1" {
-  asset_id  = oci_core_instance.postgresql_hotstandby1[0].boot_volume_id
-  policy_id = local.instance_backup_policy_id
+  count      = var.postgresql_deploy_hotstandby1 ? 1 : 0
+  depends_on = [oci_core_instance.postgresql_hotstandby1]
+  asset_id   = oci_core_instance.postgresql_hotstandby1[0].boot_volume_id
+  policy_id  = local.instance_backup_policy_id
 }
 
 resource "oci_core_volume_backup_policy_assignment" "backup_policy_assignment_postgresql_hotstandby2" {
-  asset_id  = oci_core_instance.postgresql_hotstandby2[0].boot_volume_id
-  policy_id = local.instance_backup_policy_id
+  count      = var.postgresql_deploy_hotstandby2 ? 1 : 0
+  depends_on = [oci_core_instance.postgresql_hotstandby2]
+  asset_id   = oci_core_instance.postgresql_hotstandby2[0].boot_volume_id
+  policy_id  = local.instance_backup_policy_id
 }

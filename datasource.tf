@@ -84,7 +84,7 @@ data "oci_identity_region_subscriptions" "home_region_subscriptions" {
   }
 }
 
-/********** Compartment and CF Accessors **********/
+/********** Compartment Accessors **********/
 data "oci_identity_compartments" "COMPARTMENTS" {
   compartment_id            = var.tenancy_ocid
   compartment_id_in_subtree = true
@@ -103,6 +103,7 @@ data "oci_identity_compartments" "NWCOMPARTMENTS" {
   }
 }
 
+/********** Virual Cloud Network Accessor **********/
 data "oci_core_vcns" "VCN" {
   compartment_id = local.nw_compartment_id
   filter {
@@ -113,17 +114,7 @@ data "oci_core_vcns" "VCN" {
 
 
 
-/********** Subnet Accessors **********/
-
-data "oci_core_subnets" "PUBLICSUBNET" {
-  compartment_id = local.nw_compartment_id
-  vcn_id         = local.vcn_id
-  filter {
-    name   = "display_name"
-    values = [var.public_network_subnet_name]
-  }
-}
-
+/********** Subnet Accessor **********/
 data "oci_core_subnets" "PRIVATESUBNET" {
   compartment_id = local.nw_compartment_id
   vcn_id         = local.vcn_id
@@ -133,6 +124,7 @@ data "oci_core_subnets" "PRIVATESUBNET" {
   }
 }
 
+/********** Network Security Group Accessor **********/
 data "oci_core_network_security_groups" "NSG" {
   compartment_id = local.nw_compartment_id
   vcn_id         = local.vcn_id
@@ -143,16 +135,17 @@ data "oci_core_network_security_groups" "NSG" {
   }
 }
 
+/********** Backup Policy Accessors **********/
 data "oci_core_volume_backup_policies" "DATABASEBACKUPPOLICY" {
   filter {
-    name = "display_name"
+    name   = "display_name"
     values = [var.database_backup_policy_level]
   }
 }
 
 data "oci_core_volume_backup_policies" "INSTANCEBACKUPPOLICY" {
   filter {
-    name = "display_name"
+    name   = "display_name"
     values = [var.instance_backup_policy_level]
   }
 }
@@ -160,8 +153,6 @@ data "oci_core_volume_backup_policies" "INSTANCEBACKUPPOLICY" {
 locals {
 
   # Subnet OCID local accessors
-  public_subnet_ocid = length(data.oci_core_subnets.PUBLICSUBNET.subnets) > 0 ? data.oci_core_subnets.PUBLICSUBNET.subnets[0].id : null
-
   private_subnet_ocid = length(data.oci_core_subnets.PRIVATESUBNET.subnets) > 0 ? data.oci_core_subnets.PRIVATESUBNET.subnets[0].id : null
 
   # Compartment OCID Local Accessor

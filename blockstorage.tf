@@ -14,7 +14,7 @@ resource "oci_core_volume" "ISCSIDisk_master" {
   compartment_id      = local.compartment_id
   display_name        = "${oci_core_instance.postgresql_master.display_name}_disk"
   size_in_gbs         = var.database_size_in_gb
-  vpus_per_gb         = var.vpus_per_gb
+  vpus_per_gb         = var.database_vpus_per_gb
 }
 
 # Create Disk Attachment
@@ -32,17 +32,17 @@ resource "oci_core_volume_backup_policy_assignment" "backup_policy_assignment_IS
 }
 
 resource "oci_core_volume" "ISCSIDisk_hotstandby1" {
-  count = var.postgresql_deploy_hotstandby1 ? 1 : 0
+  count               = var.postgresql_deploy_hotstandby1 ? 1 : 0
   availability_domain = var.postgresql_hotstandby1_ad
   compartment_id      = local.compartment_id
   display_name        = "${oci_core_instance.postgresql_hotstandby1[count.index].display_name}_disk"
   size_in_gbs         = var.database_size_in_gb
-  vpus_per_gb         = var.vpus_per_gb
+  vpus_per_gb         = var.database_vpus_per_gb
 }
 
 # Create Disk Attachment
 resource "oci_core_volume_attachment" "ISCSIDiskAttachment_hotstandby1" {
-  count = var.postgresql_deploy_hotstandby1 ? 1 : 0
+  count           = var.postgresql_deploy_hotstandby1 ? 1 : 0
   depends_on      = [oci_core_volume.ISCSIDisk_hotstandby1]
   attachment_type = "iscsi"
   instance_id     = oci_core_instance.postgresql_hotstandby1[count.index].id
@@ -51,24 +51,24 @@ resource "oci_core_volume_attachment" "ISCSIDiskAttachment_hotstandby1" {
 
 # Assignment of backup policy for ProdDisk
 resource "oci_core_volume_backup_policy_assignment" "backup_policy_assignment_ISCSI_Disk_hotstandby1" {
-  count = var.postgresql_deploy_hotstandby1 ? 1 : 0
+  count     = var.postgresql_deploy_hotstandby1 ? 1 : 0
   asset_id  = oci_core_volume.ISCSIDisk_hotstandby1[count.index].id
   policy_id = local.database_backup_policy_id
 }
 
 
 resource "oci_core_volume" "ISCSIDisk_hotstandby2" {
-  count = var.postgresql_deploy_hotstandby2 ? 1 : 0
+  count               = var.postgresql_deploy_hotstandby2 ? 1 : 0
   availability_domain = var.postgresql_hotstandby2_ad
   compartment_id      = local.compartment_id
   display_name        = "${oci_core_instance.postgresql_hotstandby2[count.index].display_name}_disk"
   size_in_gbs         = var.database_size_in_gb
-  vpus_per_gb         = var.vpus_per_gb
+  vpus_per_gb         = var.database_vpus_per_gb
 }
 
 # Create Disk Attachment
 resource "oci_core_volume_attachment" "ISCSIDiskAttachment_hotstandby2" {
-  count = var.postgresql_deploy_hotstandby2 ? 1 : 0
+  count           = var.postgresql_deploy_hotstandby2 ? 1 : 0
   depends_on      = [oci_core_volume.ISCSIDisk_hotstandby2]
   attachment_type = "iscsi"
   instance_id     = oci_core_instance.postgresql_hotstandby2[count.index].id
@@ -77,7 +77,7 @@ resource "oci_core_volume_attachment" "ISCSIDiskAttachment_hotstandby2" {
 
 # Assignment of backup policy for ProdDisk
 resource "oci_core_volume_backup_policy_assignment" "backup_policy_assignment_ISCSI_Disk_hotstandby2" {
-  count = var.postgresql_deploy_hotstandby2 ? 1 : 0
+  count     = var.postgresql_deploy_hotstandby2 ? 1 : 0
   asset_id  = oci_core_volume.ISCSIDisk_hotstandby2[count.index].id
   policy_id = local.database_backup_policy_id
 }
