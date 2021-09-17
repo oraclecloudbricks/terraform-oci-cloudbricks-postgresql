@@ -20,7 +20,7 @@ data "template_cloudinit_config" "cloud_init" {
 resource "oci_core_instance" "postgresql_master" {
   availability_domain = var.postgresql_master_ad
   compartment_id      = local.compartment_id
-  display_name        = "PostgreSQL_Master"
+  display_name        = var.postgresql_master_name
   shape               = var.postgresql_master_shape
 
   dynamic "shape_config" {
@@ -37,7 +37,8 @@ resource "oci_core_instance" "postgresql_master" {
     subnet_id        = local.private_subnet_ocid
     display_name     = "primaryvnic"
     assign_public_ip = false
-    hostname_label   = "pgmaster"
+    hostname_label   = var.postgresql_master_name
+    nsg_ids          = local.nsg_id == "" ? [] : [local.nsg_id]
   }
 
   source_details {
@@ -55,7 +56,7 @@ resource "oci_core_instance" "postgresql_hotstandby1" {
   count = var.postgresql_deploy_hotstandby1 ? 1 : 0
   availability_domain = var.postgresql_hotstandby1_ad == "" ? var.postgresql_master_ad : var.postgresql_hotstandby1_ad
   compartment_id      = local.compartment_id
-  display_name        = "PostgreSQL_HotStandby1"
+  display_name        = var.postgresql_standyby1_name
   shape               = var.postgresql_hotstandby_shape
 
   dynamic "shape_config" {
@@ -72,7 +73,8 @@ resource "oci_core_instance" "postgresql_hotstandby1" {
     subnet_id        = local.private_subnet_ocid
     display_name     = "primaryvnic"
     assign_public_ip = false
-    hostname_label   = "pgstandby1"
+    hostname_label   = var.postgresql_standyby1_name
+    nsg_ids          = local.nsg_id == "" ? [] : [local.nsg_id]
   }
 
   source_details {
@@ -96,7 +98,7 @@ resource "oci_core_instance" "postgresql_hotstandby2" {
   count = var.postgresql_deploy_hotstandby2 ? 1 : 0
   availability_domain = var.postgresql_hotstandby2_ad == "" ? var.postgresql_master_ad : var.postgresql_hotstandby2_ad
   compartment_id      = local.compartment_id
-  display_name        = "PostgreSQL_HotStandby2"
+  display_name        = var.postgresql_standyby2_name
   shape               = var.postgresql_hotstandby_shape
 
   dynamic "shape_config" {
@@ -113,7 +115,8 @@ resource "oci_core_instance" "postgresql_hotstandby2" {
     subnet_id        = local.private_subnet_ocid
     display_name     = "primaryvnic"
     assign_public_ip = false
-    hostname_label   = "pgstandby2"
+    hostname_label   = var.postgresql_standyby2_name
+    nsg_ids          = local.nsg_id == "" ? [] : [local.nsg_id]
   }
 
   source_details {

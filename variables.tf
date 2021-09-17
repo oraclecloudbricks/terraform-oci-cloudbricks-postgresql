@@ -29,6 +29,10 @@ variable "private_key_path" {
 
 /********** Brick Variables **********/
 
+variable "postgresql_master_name" {
+  description = "The name given to the master instance"
+}
+
 variable "postgresql_master_ad" {
   description = "The availability domain to provision the master instance in"
 }
@@ -83,6 +87,10 @@ variable "postgresql_deploy_hotstandby1" {
   type = bool
 }
 
+variable "postgresql_standyby1_name" {
+  description = "The name given to the standby1 instance"
+}
+
 variable "postgresql_hotstandby1_ad" {
   description = "The availability domain to provision the hoststandby1 instance in"
   default = ""
@@ -96,6 +104,10 @@ variable "postgresql_deploy_hotstandby2" {
   description = "Boolean to determine if to provision hotstandby2"
   default = false
   type = bool
+}
+
+variable "postgresql_standyby2_name" {
+  description = "The name given to the standby2 instance"
 }
 
 variable "postgresql_hotstandby2_ad" {
@@ -160,6 +172,7 @@ variable "private_network_subnet_name" {
 
 variable "compute_nsg_name" {
   description = "Name of the NSG associated to the compute"
+  default = ""
 }
 
 variable "database_backup_policy_level" {
