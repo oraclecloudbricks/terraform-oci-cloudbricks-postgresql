@@ -39,8 +39,8 @@ data "template_file" "postgresql_master_setup_sh" {
   template = file("scripts/postgresql_master_setup.sh")
 
   vars = {
-    pg_master_ip         = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
-    pg_hotstandby_ip     = element(data.oci_core_vnic.postgresql_hotstandby1_primaryvnic.*.private_ip_address, 0)
+    pg_master_ip         = oci_core_instance.postgresql_master.private_ip
+    pg_hotstandby_ip     = oci_core_instance.postgresql_hotstandby1[0].private_ip
     pg_password          = var.postgresql_password
     pg_version_no_dot    = replace(var.postgresql_version, ".", "")
     pg_version           = var.postgresql_version
@@ -53,8 +53,8 @@ data "template_file" "postgresql_master_setup2_sh" {
   template = file("scripts/postgresql_master_setup2.sh")
 
   vars = {
-    pg_master_ip         = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
-    pg_hotstandby_ip     = element(data.oci_core_vnic.postgresql_hotstandby2_primaryvnic.*.private_ip_address, 0)
+    pg_master_ip         = oci_core_instance.postgresql_master.private_ip
+    pg_hotstandby_ip     = oci_core_instance.postgresql_hotstandby2[0].private_ip
     pg_version           = var.postgresql_version
     pg_replicat_username = var.postgresql_replicat_username
   }
@@ -65,8 +65,8 @@ data "template_file" "postgresql_standby_setup_sh" {
   template = file("scripts/postgresql_standby_setup.sh")
 
   vars = {
-    pg_master_ip         = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
-    pg_hotstandby_ip     = element(data.oci_core_vnic.postgresql_hotstandby1_primaryvnic.*.private_ip_address, 0)
+    pg_master_ip         = oci_core_instance.postgresql_master.private_ip
+    pg_hotstandby_ip     = oci_core_instance.postgresql_hotstandby1[0].private_ip
     pg_password          = var.postgresql_password
     pg_version_no_dot    = replace(var.postgresql_version, ".", "")
     pg_version           = var.postgresql_version
@@ -89,7 +89,7 @@ resource "null_resource" "postgresql_master_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
+      host        = oci_core_instance.postgresql_master.private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -102,7 +102,7 @@ resource "null_resource" "postgresql_master_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
+      host        = oci_core_instance.postgresql_master.private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -115,7 +115,7 @@ resource "null_resource" "postgresql_master_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
+      host        = oci_core_instance.postgresql_master.private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -133,7 +133,7 @@ resource "null_resource" "postgresql_master_initdb" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
+      host        = oci_core_instance.postgresql_master.private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -146,7 +146,7 @@ resource "null_resource" "postgresql_master_initdb" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
+      host        = oci_core_instance.postgresql_master.private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -159,7 +159,7 @@ resource "null_resource" "postgresql_master_initdb" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
+      host        = oci_core_instance.postgresql_master.private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -186,7 +186,7 @@ resource "null_resource" "postgresql_hotstandby1_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address
+      host        = oci_core_instance.postgresql_hotstandby1[0].private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -199,7 +199,7 @@ resource "null_resource" "postgresql_hotstandby1_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address
+      host        = oci_core_instance.postgresql_hotstandby1[0].private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -212,7 +212,7 @@ resource "null_resource" "postgresql_hotstandby1_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address
+      host        = oci_core_instance.postgresql_hotstandby1[0].private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -239,7 +239,7 @@ resource "null_resource" "postgresql_hotstandby2_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address
+      host        = oci_core_instance.postgresql_hotstandby2[0].private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -252,7 +252,7 @@ resource "null_resource" "postgresql_hotstandby2_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address
+      host        = oci_core_instance.postgresql_hotstandby2[0].private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -265,7 +265,7 @@ resource "null_resource" "postgresql_hotstandby2_install_binaries" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address
+      host        = oci_core_instance.postgresql_hotstandby2[0].private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -285,7 +285,7 @@ resource "null_resource" "postgresql_master_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
+      host        = oci_core_instance.postgresql_master.private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -299,7 +299,7 @@ resource "null_resource" "postgresql_master_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
+      host        = oci_core_instance.postgresql_master.private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -312,7 +312,7 @@ resource "null_resource" "postgresql_master_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
+      host        = oci_core_instance.postgresql_master.private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -325,7 +325,7 @@ resource "null_resource" "postgresql_master_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
+      host        = oci_core_instance.postgresql_master.private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -344,7 +344,7 @@ resource "null_resource" "postgresql_master_setup2" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
+      host        = oci_core_instance.postgresql_master.private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -357,7 +357,7 @@ resource "null_resource" "postgresql_master_setup2" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
+      host        = oci_core_instance.postgresql_master.private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -370,7 +370,7 @@ resource "null_resource" "postgresql_master_setup2" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_master_primaryvnic.private_ip_address
+      host        = oci_core_instance.postgresql_master.private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -390,7 +390,7 @@ resource "null_resource" "postgresql_hotstandby1_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address
+      host        = oci_core_instance.postgresql_hotstandby1[0].private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -403,7 +403,7 @@ resource "null_resource" "postgresql_hotstandby1_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address
+      host        = oci_core_instance.postgresql_hotstandby1[0].private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -416,7 +416,7 @@ resource "null_resource" "postgresql_hotstandby1_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_hotstandby1_primaryvnic[count.index].private_ip_address
+      host        = oci_core_instance.postgresql_hotstandby1[0].private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -435,7 +435,7 @@ resource "null_resource" "postgresql_hotstandby2_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address
+      host        = oci_core_instance.postgresql_hotstandby2[0].private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -448,7 +448,7 @@ resource "null_resource" "postgresql_hotstandby2_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address
+      host        = oci_core_instance.postgresql_hotstandby2[0].private_ip
       private_key = file(var.ssh_private_key)
 
     }
@@ -461,7 +461,7 @@ resource "null_resource" "postgresql_hotstandby2_setup" {
     connection {
       type        = "ssh"
       user        = "opc"
-      host        = data.oci_core_vnic.postgresql_hotstandby2_primaryvnic[count.index].private_ip_address
+      host        = oci_core_instance.postgresql_hotstandby2[0].private_ip
       private_key = file(var.ssh_private_key)
 
     }
