@@ -46,35 +46,6 @@ data "oci_core_vnic" "postgresql_hotstandby2_primaryvnic" {
   vnic_id = data.oci_core_vnic_attachments.postgresql_hotstandby2_primaryvnic_attach[count.index].vnic_attachments.0.vnic_id
 }
 
-
-# Get the latest Oracle Linux image
-data "oci_core_images" "InstanceImageOCID_postgresql_master_shape" {
-  compartment_id           = local.compartment_id
-  operating_system         = var.instance_os
-  operating_system_version = var.linux_os_version
-  shape                    = var.postgresql_master_shape
-
-  filter {
-    name   = "display_name"
-    values = ["^.*Oracle[^G]*$"]
-    regex  = true
-  }
-}
-
-# Get the latest Oracle Linux image
-data "oci_core_images" "InstanceImageOCID_postgresql_hotstandby_shape" {
-  compartment_id           = local.compartment_id
-  operating_system         = var.instance_os
-  operating_system_version = var.linux_os_version
-  shape                    = var.postgresql_hotstandby_shape
-
-  filter {
-    name   = "display_name"
-    values = ["^.*Oracle[^G]*$"]
-    regex  = true
-  }
-}
-
 data "oci_identity_region_subscriptions" "home_region_subscriptions" {
   tenancy_id = var.tenancy_ocid
 
@@ -150,6 +121,15 @@ data "oci_core_volume_backup_policies" "INSTANCEBACKUPPOLICY" {
   }
 }
 
+data "oci_core_images" "ORACLELINUX" {
+  compartment_id = local.compartment_id
+
+  filter {
+    name   = "operating_system"
+    values = ["Oracle Autonomous Linux"]
+  }
+}
+
 locals {
 
   # Subnet OCID local accessors
@@ -169,6 +149,8 @@ locals {
 
   # NSG OCID Local Accessor
   nsg_id = length(data.oci_core_network_security_groups.NSG.network_security_groups) > 0 ? lookup(data.oci_core_network_security_groups.NSG.network_security_groups[0], "id") : ""
+
+  base_compute_image_ocid = data.oci_core_images.ORACLELINUX.images[0].id
 
   # Command aliases for format and mounting iscsi disks
   iscsiadm = "sudo iscsiadm"

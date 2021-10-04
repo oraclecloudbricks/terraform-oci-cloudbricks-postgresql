@@ -5,6 +5,8 @@
 ## Introduction
 The following brick contains the logic to provision a PostgreSQL database in a highly available architecture. This architecture makes use of up to 3 instance in a master and standby configuration with streaming replication.
 
+This brick is only supported on Oracle Linux for the time being.
+
 ## Reference Architecture
 The following is the reference architecture associated to this brick
 
@@ -290,8 +292,7 @@ No modules.
 | [oci_core_volume_backup_policy_assignment.backup_policy_assignment_postgresql_hotstandby1](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/resources/core_volume_backup_policy_assignment) | resource |
 | [oci_core_volume_backup_policy_assignment.backup_policy_assignment_postgresql_hotstandby2](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/resources/core_volume_backup_policy_assignment) | resource |
 | [oci_core_volume_backup_policy_assignment.backup_policy_assignment_postgresql_master](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/resources/core_volume_backup_policy_assignment) | resource |
-| [oci_core_images.InstanceImageOCID_postgresql_hotstandby_shape](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_images) | data source |
-| [oci_core_images.InstanceImageOCID_postgresql_master_shape](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_images) | data source |
+| [oci_core_images.ORACLELINUX](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_images) | data source |
 | [oci_core_network_security_groups.NSG](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_network_security_groups) | data source |
 | [oci_core_subnets.PRIVATESUBNET](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_subnets) | data source |
 | [oci_core_vcns.VCN](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_vcns) | data source |

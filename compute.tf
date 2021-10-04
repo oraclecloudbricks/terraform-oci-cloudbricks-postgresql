@@ -43,7 +43,7 @@ resource "oci_core_instance" "postgresql_master" {
 
   source_details {
     source_type = "image"
-    source_id   = data.oci_core_images.InstanceImageOCID_postgresql_master_shape.images[0].id
+    source_id   = local.base_compute_image_ocid
   }
 
   metadata = {
@@ -79,7 +79,7 @@ resource "oci_core_instance" "postgresql_hotstandby1" {
 
   source_details {
     source_type = "image"
-    source_id   = data.oci_core_images.InstanceImageOCID_postgresql_hotstandby_shape.images[0].id
+    source_id   = local.base_compute_image_ocid
   }
 
   connection {
@@ -121,7 +121,7 @@ resource "oci_core_instance" "postgresql_hotstandby2" {
 
   source_details {
     source_type = "image"
-    source_id   = data.oci_core_images.InstanceImageOCID_postgresql_hotstandby_shape.images[0].id
+    source_id   = local.base_compute_image_ocid
   }
 
   connection {
