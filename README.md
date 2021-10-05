@@ -241,7 +241,7 @@ No requirements.
 | Name | Version |
 |------|---------|
 | <a name="provider_null"></a> [null](#provider\_null) | 3.1.0 |
-| <a name="provider_oci"></a> [oci](#provider\_oci) | 4.44.0 |
+| <a name="provider_oci"></a> [oci](#provider\_oci) | 4.46.0 |
 | <a name="provider_template"></a> [template](#provider\_template) | 2.2.0 |
 
 ## Modules
@@ -297,19 +297,10 @@ No modules.
 | [oci_core_network_security_groups.NSG](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_network_security_groups) | data source |
 | [oci_core_subnets.PRIVATESUBNET](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_subnets) | data source |
 | [oci_core_vcns.VCN](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_vcns) | data source |
-| [oci_core_vnic.postgresql_hotstandby1_primaryvnic](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_vnic) | data source |
-| [oci_core_vnic.postgresql_hotstandby2_primaryvnic](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_vnic) | data source |
-| [oci_core_vnic.postgresql_master_primaryvnic](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_vnic) | data source |
-| [oci_core_vnic_attachments.postgresql_hotstandby1_primaryvnic_attach](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_vnic_attachments) | data source |
-| [oci_core_vnic_attachments.postgresql_hotstandby2_primaryvnic_attach](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_vnic_attachments) | data source |
-| [oci_core_vnic_attachments.postgresql_master_primaryvnic_attach](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_vnic_attachments) | data source |
-| [oci_core_vnic_attachments.postgresql_master_vnics](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_vnic_attachments) | data source |
 | [oci_core_volume_backup_policies.DATABASEBACKUPPOLICY](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_volume_backup_policies) | data source |
 | [oci_core_volume_backup_policies.INSTANCEBACKUPPOLICY](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_volume_backup_policies) | data source |
 | [oci_identity_compartments.COMPARTMENTS](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/identity_compartments) | data source |
 | [oci_identity_compartments.NWCOMPARTMENTS](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/identity_compartments) | data source |
-| [oci_identity_region_subscriptions.home_region_subscriptions](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/identity_region_subscriptions) | data source |
-| [template_cloudinit_config.cloud_init](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/cloudinit_config) | data source |
 | [template_file.postgresql_install_binaries_sh](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 | [template_file.postgresql_master_initdb_sh](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 | [template_file.postgresql_master_setup2_sh](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
@@ -349,7 +340,7 @@ No modules.
 | <a name="input_postgresql_master_ocpus"></a> [postgresql\_master\_ocpus](#input\_postgresql\_master\_ocpus) | The number of OCPUS for the master instance to use when flex shape is enabled | `string` | `""` | no |
 | <a name="input_postgresql_master_shape"></a> [postgresql\_master\_shape](#input\_postgresql\_master\_shape) | The shape for the master instance to use | `any` | n/a | yes |
 | <a name="input_postgresql_password"></a> [postgresql\_password](#input\_postgresql\_password) | The password used in setup of the PostgreSQL database | `any` | n/a | yes |
-| <a name="input_postgresql_replicat_username"></a> [postgresql\_replicat\_username](#input\_postgresql\_replicat\_username) | The username used in setup of PostgreSQL replication | `string` | `""` | no |
+| <a name="input_postgresql_replicat_username"></a> [postgresql\_replicat\_username](#input\_postgresql\_replicat\_username) | The username used in setup of PostgreSQL replication | `string` | `"replicator"` | no |
 | <a name="input_postgresql_standyby1_name"></a> [postgresql\_standyby1\_name](#input\_postgresql\_standyby1\_name) | The name given to the standby1 instance | `string` | `""` | no |
 | <a name="input_postgresql_standyby2_name"></a> [postgresql\_standyby2\_name](#input\_postgresql\_standyby2\_name) | The name given to the standby2 instance | `string` | `""` | no |
 | <a name="input_postgresql_version"></a> [postgresql\_version](#input\_postgresql\_version) | The version of PostgreSQL used in the setup | `any` | n/a | yes |
@@ -366,7 +357,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_PostgreSQL_Master_VM_public_IP"></a> [PostgreSQL\_Master\_VM\_public\_IP](#output\_PostgreSQL\_Master\_VM\_public\_IP) | n/a |
+| <a name="output_PostgreSQL_Master"></a> [PostgreSQL\_Master](#output\_PostgreSQL\_Master) | PostgreSQL Master Instance |
 | <a name="output_PostgreSQL_Username"></a> [PostgreSQL\_Username](#output\_PostgreSQL\_Username) | n/a |
 
 ## Contributing
