@@ -39,7 +39,7 @@ vcn_display_name                        = "MY_VCN"
 
 postgresql_replicat_username = "replicator"
 postgresql_password          = "MY_DATABASE_PASSWORD"
-postgresql_version           = "13"
+postgresql_version           = "14"
 database_size_in_gb          = "50"
 database_vpus_per_gb         = "10"
 database_backup_policy_level = "gold"
@@ -86,7 +86,7 @@ vcn_display_name                        = "MY_VCN"
 
 postgresql_replicat_username = "replicator"
 postgresql_password          = "MY_DATABASE_PASSWORD"
-postgresql_version           = "13"
+postgresql_version           = "14"
 database_size_in_gb          = "50"
 database_vpus_per_gb         = "10"
 database_backup_policy_level = "gold"
@@ -137,7 +137,7 @@ private_network_subnet_name             = "MY_PRIVATE_SUBNET"
 vcn_display_name                        = "MY_VCN"
 
 postgresql_password          = "MY_DATABASE_PASSWORD"
-postgresql_version           = "13"
+postgresql_version           = "14"
 database_size_in_gb          = "50"
 database_vpus_per_gb         = "10"
 database_backup_policy_level = "gold"
@@ -170,7 +170,7 @@ private_network_subnet_name             = "MY_PRIVATE_SUBNET"
 vcn_display_name                        = "MY_VCN"
 
 postgresql_password          = "MY_DATABASE_PASSWORD"
-postgresql_version           = "13"
+postgresql_version           = "14"
 database_size_in_gb          = "50"
 database_vpus_per_gb         = "10"
 database_backup_policy_level = "gold"
@@ -190,7 +190,8 @@ postgresql_master_memory_in_gb  = "32"
 - Compute ssh keys to later log into instances. Paths to the keys should be provided in variables `ssh_public_key` and `ssh_private_key`.
 - Variable `compute_nsg_name` is an optional network security group that can be attached.
 - Variable `postgresql_replicat_username` is used as a login name to setup replication. This doesn't need to be supplied in a master only configuration.
-- Variable `postgresql_version` can be any of the supported version of PostgreSQL at the time of making this brick (`9.6`, `10`, `11`, `12` and `13`).
+- Variable `postgresql_version` can be any of the supported version of PostgreSQL at the time of making this brick (`9.6`, `10`, `11`, `12`, `13` and `14`).
+*Note*: PostgreSQL version `9.6` will lose official support from `11 Nov 2021`.
 - Variable `database_size_in_gb` is the size of the attached ISCSI disks to store the PostgreSQL database on. This can be between `50` and `32768`.
 - Variable `database_vpus_per_gb` is the number of volume performance units to be applied to the attached ISCSI disks. The value must be between `0` and `120` and be multiple of 10.
 - Variable `database_backup_policy_level` specifies the name of the backup policy used on the attached database ISCSI disks.
