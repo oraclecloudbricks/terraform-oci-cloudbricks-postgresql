@@ -6,7 +6,7 @@
 
 
 data "template_file" "postgresql_install_binaries_sh" {
-  template = file("scripts/postgresql_install_binaries.sh")
+  template = file("${path.module}/scripts/postgresql_install_binaries.sh")
 
   vars = {
     pg_password       = var.postgresql_password
@@ -16,7 +16,7 @@ data "template_file" "postgresql_install_binaries_sh" {
 }
 
 data "template_file" "postgresql_master_initdb_sh" {
-  template = file("scripts/postgresql_master_initdb.sh")
+  template = file("${path.module}/scripts/postgresql_master_initdb.sh")
 
   vars = {
     pg_password       = var.postgresql_password
@@ -26,7 +26,7 @@ data "template_file" "postgresql_master_initdb_sh" {
 }
 
 data "template_file" "postgresql_master_setup_sql" {
-  template = file("scripts/postgresql_master_setup.sql")
+  template = file("${path.module}/scripts/postgresql_master_setup.sql")
 
   vars = {
     pg_replicat_username = var.postgresql_replicat_username
@@ -36,7 +36,7 @@ data "template_file" "postgresql_master_setup_sql" {
 
 data "template_file" "postgresql_master_setup_sh" {
   count    = var.postgresql_deploy_hotstandby1 ? 1 : 0
-  template = file("scripts/postgresql_master_setup.sh")
+  template = file("${path.module}/scripts/postgresql_master_setup.sh")
 
   vars = {
     pg_master_ip         = oci_core_instance.postgresql_master.private_ip
@@ -50,7 +50,7 @@ data "template_file" "postgresql_master_setup_sh" {
 
 data "template_file" "postgresql_master_setup2_sh" {
   count    = var.postgresql_deploy_hotstandby2 ? 1 : 0
-  template = file("scripts/postgresql_master_setup2.sh")
+  template = file("${path.module}/scripts/postgresql_master_setup2.sh")
 
   vars = {
     pg_master_ip         = oci_core_instance.postgresql_master.private_ip
@@ -62,7 +62,7 @@ data "template_file" "postgresql_master_setup2_sh" {
 
 data "template_file" "postgresql_standby_setup_sh" {
   count    = var.postgresql_deploy_hotstandby1 ? 1 : 0
-  template = file("scripts/postgresql_standby_setup.sh")
+  template = file("${path.module}/scripts/postgresql_standby_setup.sh")
 
   vars = {
     pg_master_ip         = oci_core_instance.postgresql_master.private_ip
