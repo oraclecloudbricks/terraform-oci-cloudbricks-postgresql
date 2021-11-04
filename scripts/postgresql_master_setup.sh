@@ -25,7 +25,7 @@ sudo -u root bash -c "echo 'wal_level = replica' | sudo tee -a $DATA_DIR/postgre
 sudo -u root bash -c "echo 'archive_mode = on' | sudo tee -a $DATA_DIR/postgresql.conf"
 sudo -u root bash -c "echo 'wal_log_hints = on' | sudo tee -a $DATA_DIR/postgresql.conf"
 sudo -u root bash -c "echo 'max_wal_senders = 3' | sudo tee -a $DATA_DIR/postgresql.conf"
-if [[ $pg_version == "13" ]]; then 
+if [[ $pg_version == "13" || $pg_version == "14" ]]; then 
 	sudo -u root bash -c "echo 'wal_keep_size = 16MB' | sudo tee -a $DATA_DIR/postgresql.conf"
 else
 	sudo -u root bash -c "echo 'wal_keep_segments = 8' | sudo tee -a $DATA_DIR/postgresql.conf"
@@ -43,9 +43,6 @@ sudo -u root bash -c "echo 'host all all ${pg_master_ip}/32 md5' | sudo tee -a $
 sudo -u root bash -c "chown postgres $DATA_DIR/pg_hba.conf" 
 
 # Restart of PostrgreSQL service
-# sudo systemctl stop postgresql-${pg_version}
-# sudo systemctl start postgresql-${pg_version}
-# sudo systemctl status postgresql-${pg_version}
 sudo systemctl stop postgresql
 sudo systemctl start postgresql
 sudo systemctl status postgresql

@@ -9,7 +9,7 @@ export DATA_DIR="/u01/data"
 sudo mkdir -p /u01/data
 sudo chown -R postgres:postgres /u01
 
-sudo tee -a /etc/systemd/system/postgresql.service > /dev/null <<'EOF'
+sudo tee /etc/systemd/system/postgresql.service > /dev/null <<'EOF'
 .include /usr/lib/systemd/system/postgresql-${pg_version}.service
 [Service]
 
@@ -19,7 +19,7 @@ Environment=PGLOG=/u01/data/pgstartup.log
 EOF
 
 # Change password of postgres user
-echo "postgres:${pg_password}" | chpasswd
+sudo -u root bash -c "echo postgres:345database5678password0238 | chpasswd"
 
 # Setting firewall rules
 sudo -u root bash -c "firewall-cmd --permanent --zone=trusted --add-source=${pg_master_ip}/32"
@@ -31,8 +31,10 @@ sudo -u root bash -c "rm -rf $DATA_DIR/*"
 
 sudo su - postgres -c "export PGPASSWORD=${pg_replicat_password}; /usr/pgsql-${pg_version}/bin/pg_basebackup -D $DATA_DIR/ -h ${pg_master_ip} -X stream -c fast -U ${pg_replicat_username}"
 
+
+
 # Update the content of recovery.conf
-if [[ $pg_version == "13" ]]; then 
+if [[ $pg_version == "13" || $pg_version == "14" ]]; then 
 	touch $DATA_DIR/standby.signal
 	touch $DATA_DIR/recovery.signal
 	sudo -u root bash -c "echo 'primary_conninfo  = '\''host=${pg_master_ip} port=5432 user=${pg_replicat_username} password=${pg_replicat_password}'\'' ' | sudo tee -a $DATA_DIR/postgresql.conf"
@@ -51,7 +53,7 @@ else
     sudo -u root bash -c "chown postgres $DATA_DIR/recovery.conf"
 fi
 
-if [[ $pg_version == "13" ]]; then 
+if [[ $pg_version == "13" || $pg_version == "14" ]]; then 
   sudo chmod -R 750 /u01
 else 
   sudo chmod -R 700 /u01

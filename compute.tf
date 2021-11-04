@@ -1,21 +1,10 @@
 # Copyright (c) 2021 Oracle and/or its affiliates.
 # All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
-# blockstorage.tf
+# compute.tf
 #
 # Purpose: The following script defines the declaration of computes needed for the PostgreSQL deployment
 # Registry: https://registry.terraform.io/providers/hashicorp/oci/latest/docs/resources/core_instance
 
-
-data "template_cloudinit_config" "cloud_init" {
-  gzip          = true
-  base64_encode = true
-
-  part {
-    filename     = "ainit.sh"
-    content_type = "text/x-shellscript"
-    content      = "RSA"
-  }
-}
 
 resource "oci_core_instance" "postgresql_master" {
   availability_domain = var.postgresql_master_ad
@@ -43,12 +32,11 @@ resource "oci_core_instance" "postgresql_master" {
 
   source_details {
     source_type = "image"
-    source_id   = data.oci_core_images.InstanceImageOCID_postgresql_master_shape.images[0].id
+    source_id   = local.base_compute_image_ocid
   }
 
   metadata = {
     ssh_authorized_keys = file(var.ssh_public_key)
-    user_data           = data.template_cloudinit_config.cloud_init.rendered
   }
 }
 
@@ -79,7 +67,7 @@ resource "oci_core_instance" "postgresql_hotstandby1" {
 
   source_details {
     source_type = "image"
-    source_id   = data.oci_core_images.InstanceImageOCID_postgresql_hotstandby_shape.images[0].id
+    source_id   = local.base_compute_image_ocid
   }
 
   connection {
@@ -121,7 +109,7 @@ resource "oci_core_instance" "postgresql_hotstandby2" {
 
   source_details {
     source_type = "image"
-    source_id   = data.oci_core_images.InstanceImageOCID_postgresql_hotstandby_shape.images[0].id
+    source_id   = local.base_compute_image_ocid
   }
 
   connection {

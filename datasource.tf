@@ -4,77 +4,6 @@
 #
 # Purpose: The following script defines the lookup logic used in code to obtain pre-created or JIT-created resources in tenancy.
 
-
-data "oci_core_vnic_attachments" "postgresql_master_vnics" {
-  compartment_id      = local.compartment_id
-  availability_domain = var.postgresql_master_ad
-  instance_id         = oci_core_instance.postgresql_master.id
-}
-
-
-data "oci_core_vnic_attachments" "postgresql_master_primaryvnic_attach" {
-  availability_domain = var.postgresql_master_ad
-  compartment_id      = local.compartment_id
-  instance_id         = oci_core_instance.postgresql_master.id
-}
-
-data "oci_core_vnic" "postgresql_master_primaryvnic" {
-  vnic_id = data.oci_core_vnic_attachments.postgresql_master_primaryvnic_attach.vnic_attachments.0.vnic_id
-}
-
-data "oci_core_vnic_attachments" "postgresql_hotstandby1_primaryvnic_attach" {
-  count               = var.postgresql_deploy_hotstandby1 ? 1 : 0
-  availability_domain = var.postgresql_hotstandby1_ad
-  compartment_id      = local.compartment_id
-  instance_id         = oci_core_instance.postgresql_hotstandby1[count.index].id
-}
-
-data "oci_core_vnic" "postgresql_hotstandby1_primaryvnic" {
-  count   = var.postgresql_deploy_hotstandby1 ? 1 : 0
-  vnic_id = data.oci_core_vnic_attachments.postgresql_hotstandby1_primaryvnic_attach[count.index].vnic_attachments.0.vnic_id
-}
-
-data "oci_core_vnic_attachments" "postgresql_hotstandby2_primaryvnic_attach" {
-  count               = var.postgresql_deploy_hotstandby2 ? 1 : 0
-  availability_domain = var.postgresql_hotstandby2_ad
-  compartment_id      = local.compartment_id
-  instance_id         = oci_core_instance.postgresql_hotstandby2[count.index].id
-}
-
-data "oci_core_vnic" "postgresql_hotstandby2_primaryvnic" {
-  count   = var.postgresql_deploy_hotstandby2 ? 1 : 0
-  vnic_id = data.oci_core_vnic_attachments.postgresql_hotstandby2_primaryvnic_attach[count.index].vnic_attachments.0.vnic_id
-}
-
-
-# Get the latest Oracle Linux image
-data "oci_core_images" "InstanceImageOCID_postgresql_master_shape" {
-  compartment_id           = local.compartment_id
-  operating_system         = var.instance_os
-  operating_system_version = var.linux_os_version
-  shape                    = var.postgresql_master_shape
-
-  filter {
-    name   = "display_name"
-    values = ["^.*Oracle[^G]*$"]
-    regex  = true
-  }
-}
-
-# Get the latest Oracle Linux image
-data "oci_core_images" "InstanceImageOCID_postgresql_hotstandby_shape" {
-  compartment_id           = local.compartment_id
-  operating_system         = var.instance_os
-  operating_system_version = var.linux_os_version
-  shape                    = var.postgresql_hotstandby_shape
-
-  filter {
-    name   = "display_name"
-    values = ["^.*Oracle[^G]*$"]
-    regex  = true
-  }
-}
-
 data "oci_identity_region_subscriptions" "home_region_subscriptions" {
   tenancy_id = var.tenancy_ocid
 
@@ -150,6 +79,15 @@ data "oci_core_volume_backup_policies" "INSTANCEBACKUPPOLICY" {
   }
 }
 
+data "oci_core_images" "ORACLELINUX" {
+  compartment_id = local.compartment_id
+
+  filter {
+    name   = "operating_system"
+    values = ["Oracle Autonomous Linux"]
+  }
+}
+
 locals {
 
   # Subnet OCID local accessors
@@ -170,11 +108,12 @@ locals {
   # NSG OCID Local Accessor
   nsg_id = length(data.oci_core_network_security_groups.NSG.network_security_groups) > 0 ? lookup(data.oci_core_network_security_groups.NSG.network_security_groups[0], "id") : ""
 
+  base_compute_image_ocid = data.oci_core_images.ORACLELINUX.images[0].id
+
   # Command aliases for format and mounting iscsi disks
   iscsiadm = "sudo iscsiadm"
   fdisk    = "(echo n; echo p; echo '1'; echo ''; echo ''; echo 't';echo '8e'; echo w) | sudo /sbin/fdisk "
   pvcreate = "sudo /sbin/pvcreate"
   vgcreate = "sudo /sbin/vgcreate"
   mkfs_xfs = "sudo /sbin/mkfs.xfs"
-
 }

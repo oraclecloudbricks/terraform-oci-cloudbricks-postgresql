@@ -136,7 +136,7 @@ variable "linux_os_version" {
 
 variable "postgresql_replicat_username" {
   description = "The username used in setup of PostgreSQL replication"
-  default     = ""
+  default     = "replicator"
 }
 
 variable "postgresql_password" {
