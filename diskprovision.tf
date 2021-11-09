@@ -45,7 +45,7 @@ resource "null_resource" "partition_disk_master" {
     inline = [
       "set +x",
       "export DEVICE_ID=/dev/disk/by-path/ip-${oci_core_volume_attachment.ISCSIDiskAttachment_master.ipv4}:${oci_core_volume_attachment.ISCSIDiskAttachment_master.port}-iscsi-${oci_core_volume_attachment.ISCSIDiskAttachment_master.iqn}-lun-1",
-      "${local.fdisk} $${DEVICE_ID}",
+      "if [ ${var.database_size_in_gb} > 2000 ]; then ${local.parted} $${DEVICE_ID} mklabel gpt mkpart P1 xfs 0% 100%; else ${local.fdisk} $${DEVICE_ID}; fi",
     ]
   }
 }
@@ -189,7 +189,7 @@ resource "null_resource" "partition_disk_hotstandby1" {
     inline = [
       "set +x",
       "export DEVICE_ID=/dev/disk/by-path/ip-${oci_core_volume_attachment.ISCSIDiskAttachment_hotstandby1[count.index].ipv4}:${oci_core_volume_attachment.ISCSIDiskAttachment_hotstandby1[count.index].port}-iscsi-${oci_core_volume_attachment.ISCSIDiskAttachment_hotstandby1[count.index].iqn}-lun-1",
-      "${local.fdisk} $${DEVICE_ID}",
+      "if [ ${var.database_size_in_gb} > 2000 ]; then ${local.parted} $${DEVICE_ID} mklabel gpt mkpart P1 xfs 0% 100%; else ${local.fdisk} $${DEVICE_ID}; fi",
     ]
   }
 }
@@ -336,7 +336,7 @@ resource "null_resource" "partition_disk_hotstandby2" {
     inline = [
       "set +x",
       "export DEVICE_ID=/dev/disk/by-path/ip-${oci_core_volume_attachment.ISCSIDiskAttachment_hotstandby2[count.index].ipv4}:${oci_core_volume_attachment.ISCSIDiskAttachment_hotstandby2[count.index].port}-iscsi-${oci_core_volume_attachment.ISCSIDiskAttachment_hotstandby2[count.index].iqn}-lun-1",
-      "${local.fdisk} $${DEVICE_ID}",
+      "if [ ${var.database_size_in_gb} > 2000 ]; then ${local.parted} $${DEVICE_ID} mklabel gpt mkpart P1 xfs 0% 100%; else ${local.fdisk} $${DEVICE_ID}; fi",
     ]
   }
 }
