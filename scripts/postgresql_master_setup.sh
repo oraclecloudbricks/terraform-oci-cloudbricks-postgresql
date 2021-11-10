@@ -16,10 +16,6 @@ sudo -u root bash -c "firewall-cmd --permanent --zone=trusted --add-source=${pg_
 sudo -u root bash -c "firewall-cmd --permanent --zone=trusted --add-port=5432/tcp"
 sudo -u root bash -c "firewall-cmd --reload"
 
-# Create replication user
-chown postgres /tmp/postgresql_master_setup.sql
-sudo -u postgres bash -c "psql -d template1 -f /tmp/postgresql_master_setup.sql"
-
 # Update the content of postgresql.conf to support WAL
 sudo -u root bash -c "echo 'wal_level = replica' | sudo tee -a $DATA_DIR/postgresql.conf"
 sudo -u root bash -c "echo 'archive_mode = on' | sudo tee -a $DATA_DIR/postgresql.conf"
@@ -46,3 +42,7 @@ sudo -u root bash -c "chown postgres $DATA_DIR/pg_hba.conf"
 sudo systemctl stop postgresql
 sudo systemctl start postgresql
 sudo systemctl status postgresql
+
+# Create replication user
+chown postgres /tmp/postgresql_master_setup.sql
+sudo -u postgres bash -c "psql -d template1 -f /tmp/postgresql_master_setup.sql"
