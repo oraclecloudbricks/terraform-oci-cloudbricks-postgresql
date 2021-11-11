@@ -187,6 +187,9 @@ postgresql_master_memory_in_gb  = "32"
 ```
 
 ### Variable Specific Conisderions
+- You can pass on the OCID of both compartment and subnet for compute placement, by: 
+  - Setting variable `pass_ocid_instead` to `true`. **Note that this is an all in variable, meaning that if ocids are going to be used, then all opted values will require ocid instead of a name for lookup**
+  - Providing ocid values for variables `subnet_ocid` and `compartment_ocid`
 - Compute ssh keys to later log into instances. Paths to the keys should be provided in variables `ssh_public_key` and `ssh_private_key`.
 - Variable `compute_nsg_name` is an optional network security group that can be attached.
 - Variable `postgresql_replicat_username` is used as a login name to setup replication. This doesn't need to be supplied in a master only configuration.
@@ -240,9 +243,9 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_null"></a> [null](#provider\_null) | 3.1.0 |
-| <a name="provider_oci"></a> [oci](#provider\_oci) | 4.46.0 |
-| <a name="provider_template"></a> [template](#provider\_template) | 2.2.0 |
+| <a name="provider_null"></a> [null](#provider\_null) | n/a |
+| <a name="provider_oci"></a> [oci](#provider\_oci) | n/a |
+| <a name="provider_template"></a> [template](#provider\_template) | n/a |
 
 ## Modules
 
@@ -301,6 +304,7 @@ No modules.
 | [oci_core_volume_backup_policies.INSTANCEBACKUPPOLICY](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/core_volume_backup_policies) | data source |
 | [oci_identity_compartments.COMPARTMENTS](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/identity_compartments) | data source |
 | [oci_identity_compartments.NWCOMPARTMENTS](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/identity_compartments) | data source |
+| [oci_identity_region_subscriptions.home_region_subscriptions](https://registry.terraform.io/providers/hashicorp/oci/latest/docs/data-sources/identity_region_subscriptions) | data source |
 | [template_file.postgresql_install_binaries_sh](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 | [template_file.postgresql_master_initdb_sh](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 | [template_file.postgresql_master_setup2_sh](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
@@ -312,6 +316,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_compartment_ocid"></a> [compartment\_ocid](#input\_compartment\_ocid) | Compartment OCID for component usage | `string` | `""` | no |
 | <a name="input_compute_nsg_name"></a> [compute\_nsg\_name](#input\_compute\_nsg\_name) | Name of the NSG associated to the compute | `string` | `""` | no |
 | <a name="input_database_backup_policy_level"></a> [database\_backup\_policy\_level](#input\_database\_backup\_policy\_level) | Backup policy level for Database ISCSI disks | `any` | n/a | yes |
 | <a name="input_database_size_in_gb"></a> [database\_size\_in\_gb](#input\_database\_size\_in\_gb) | Disk Capacity for Database | `any` | n/a | yes |
@@ -322,6 +327,7 @@ No modules.
 | <a name="input_linux_compute_instance_compartment_name"></a> [linux\_compute\_instance\_compartment\_name](#input\_linux\_compute\_instance\_compartment\_name) | Defines the compartment name where the infrastructure will be created | `any` | n/a | yes |
 | <a name="input_linux_compute_network_compartment_name"></a> [linux\_compute\_network\_compartment\_name](#input\_linux\_compute\_network\_compartment\_name) | Defines the compartment where the Network is currently located | `any` | n/a | yes |
 | <a name="input_linux_os_version"></a> [linux\_os\_version](#input\_linux\_os\_version) | Operating system version for all Linux instances | `string` | `"7.9"` | no |
+| <a name="input_pass_ocid_instead"></a> [pass\_ocid\_instead](#input\_pass\_ocid\_instead) | Boolean to determine if to pass the OCID instead of the name of the component | `bool` | `false` | no |
 | <a name="input_postgresql_deploy_hotstandby1"></a> [postgresql\_deploy\_hotstandby1](#input\_postgresql\_deploy\_hotstandby1) | Boolean to determine if to provision hotstandby1 | `bool` | `false` | no |
 | <a name="input_postgresql_deploy_hotstandby2"></a> [postgresql\_deploy\_hotstandby2](#input\_postgresql\_deploy\_hotstandby2) | Boolean to determine if to provision hotstandby2 | `bool` | `false` | no |
 | <a name="input_postgresql_hotstandby1_ad"></a> [postgresql\_hotstandby1\_ad](#input\_postgresql\_hotstandby1\_ad) | The availability domain to provision the hoststandby1 instance in | `string` | `""` | no |
@@ -349,8 +355,9 @@ No modules.
 | <a name="input_region"></a> [region](#input\_region) | Target region where artifacts are going to be created | `any` | n/a | yes |
 | <a name="input_ssh_private_key"></a> [ssh\_private\_key](#input\_ssh\_private\_key) | Defines SSH Private Key to be used in order to remotely connect to compute instances | `any` | n/a | yes |
 | <a name="input_ssh_public_key"></a> [ssh\_public\_key](#input\_ssh\_public\_key) | Defines SSH Public Key to be used in order to remotely connect to compute instances | `any` | n/a | yes |
+| <a name="input_subnet_ocid"></a> [subnet\_ocid](#input\_subnet\_ocid) | Subnet OCID for component usage | `string` | `""` | no |
 | <a name="input_tenancy_ocid"></a> [tenancy\_ocid](#input\_tenancy\_ocid) | OCID of tenancy | `any` | n/a | yes |
-| <a name="input_user_ocid"></a> [user\_ocid](#input\_user\_ocid) | User OCID in tenancy. Currently hardcoded to user denny.alquinta@oracle.com | `any` | n/a | yes |
+| <a name="input_user_ocid"></a> [user\_ocid](#input\_user\_ocid) | User OCID in tenancy. | `any` | n/a | yes |
 | <a name="input_vcn_display_name"></a> [vcn\_display\_name](#input\_vcn\_display\_name) | VCN Display name to execute lookup | `any` | n/a | yes |
 
 ## Outputs
@@ -359,7 +366,6 @@ No modules.
 |------|-------------|
 | <a name="output_PostgreSQL_Master"></a> [PostgreSQL\_Master](#output\_PostgreSQL\_Master) | PostgreSQL Master Instance |
 | <a name="output_PostgreSQL_Username"></a> [PostgreSQL\_Username](#output\_PostgreSQL\_Username) | n/a |
-
 ## Contributing
 This project is open source.  Please submit your contributions by forking this repository and submitting a pull request!  Oracle appreciates any contributions that are made by the open source community.
 

@@ -8,7 +8,7 @@
 
 resource "oci_core_instance" "postgresql_master" {
   availability_domain = var.postgresql_master_ad
-  compartment_id      = local.compartment_id
+  compartment_id      = var.pass_ocid_instead == true ? var.compartment_ocid : local.compartment_id
   display_name        = var.postgresql_master_name
   shape               = var.postgresql_master_shape
 
@@ -23,7 +23,7 @@ resource "oci_core_instance" "postgresql_master" {
   fault_domain = var.postgresql_master_fd
 
   create_vnic_details {
-    subnet_id        = local.private_subnet_ocid
+    subnet_id        = var.pass_ocid_instead == true ? var.subnet_ocid : local.private_subnet_ocid
     display_name     = "primaryvnic"
     assign_public_ip = false
     hostname_label   = var.postgresql_master_name

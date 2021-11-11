@@ -14,7 +14,7 @@ variable "tenancy_ocid" {
 }
 
 variable "user_ocid" {
-  description = "User OCID in tenancy. Currently hardcoded to user denny.alquinta@oracle.com"
+  description = "User OCID in tenancy."
 }
 
 variable "fingerprint" {
@@ -192,4 +192,18 @@ variable "instance_backup_policy_level" {
   description = "Backup policy level for instance boot volume disks"
 }
 
+variable "pass_ocid_instead" {
+  description = "Boolean to determine if to pass the OCID instead of the name of the component"
+  default = false
+}
+variable "subnet_ocid" {
+  description = "Subnet OCID for component usage"
+  default = ""  
+}
+
+variable "compartment_ocid" {
+  description = "Compartment OCID for component usage"
+  default = ""
+  
+}
 /********** Brick Variables **********/
