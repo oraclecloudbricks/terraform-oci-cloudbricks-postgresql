@@ -20,6 +20,19 @@ resource "oci_core_instance" "postgresql_master" {
     }
   }
 
+  dynamic "agent_config" {
+    for_each = var.bastion_service_enabled ? [1] : []
+    content {
+      are_all_plugins_disabled = false
+      is_management_disabled   = false
+      is_monitoring_disabled   = false
+      plugins_config {
+        desired_state = "ENABLED"
+        name          = "Bastion"
+      }
+    }
+  }
+
   fault_domain = var.postgresql_master_fd
 
   create_vnic_details {

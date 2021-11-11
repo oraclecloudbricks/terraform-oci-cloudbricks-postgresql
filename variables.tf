@@ -157,17 +157,17 @@ variable "ssh_private_key" {
 
 variable "linux_compute_instance_compartment_name" {
   description = "Defines the compartment name where the infrastructure will be created"
-  default = ""
+  default     = ""
 }
 
 variable "linux_compute_network_compartment_name" {
   description = "Defines the compartment where the Network is currently located"
-  default = ""
+  default     = ""
 }
 
 variable "vcn_display_name" {
   description = "VCN Display name to execute lookup"
-  default = ""
+  default     = ""
 }
 
 variable "private_network_subnet_name" {
@@ -198,16 +198,22 @@ variable "instance_backup_policy_level" {
 
 variable "pass_ocid_instead" {
   description = "Boolean to determine if to pass the OCID instead of the name of the component"
-  default = false
+  default     = false
 }
 variable "subnet_ocid" {
   description = "Subnet OCID for component usage"
-  default = ""  
+  default     = ""
 }
 
 variable "compartment_ocid" {
   description = "Compartment OCID for component usage"
-  default = ""
-  
+  default     = ""
+
+}
+
+variable "bastion_service_enabled" {
+  description = "Boolean to determine if to enable Bastion Service"
+  default     = true
+
 }
 /********** Brick Variables **********/

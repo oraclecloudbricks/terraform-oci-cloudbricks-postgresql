@@ -190,6 +190,7 @@ postgresql_master_memory_in_gb  = "32"
 - You can pass on the OCID of both compartment and subnet for compute placement, by: 
   - Setting variable `pass_ocid_instead` to `true`. **Note that this is an all in variable, meaning that if ocids are going to be used, then all opted values will require ocid instead of a name for lookup**
   - Providing ocid values for variables `subnet_ocid` and `compartment_ocid`
+- You can disable bastion service by setting variable `bastion_service_enabled` to false
 - Compute ssh keys to later log into instances. Paths to the keys should be provided in variables `ssh_public_key` and `ssh_private_key`.
 - Variable `compute_nsg_name` is an optional network security group that can be attached.
 - Variable `postgresql_replicat_username` is used as a login name to setup replication. This doesn't need to be supplied in a master only configuration.
@@ -234,7 +235,6 @@ provider "oci" {
 ```
 
 ## Variable documentation
-
 ## Requirements
 
 No requirements.
@@ -316,6 +316,7 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_bastion_service_enabled"></a> [bastion\_service\_enabled](#input\_bastion\_service\_enabled) | Boolean to determine if to enable Bastion Service | `bool` | `true` | no |
 | <a name="input_compartment_ocid"></a> [compartment\_ocid](#input\_compartment\_ocid) | Compartment OCID for component usage | `string` | `""` | no |
 | <a name="input_compute_nsg_name"></a> [compute\_nsg\_name](#input\_compute\_nsg\_name) | Name of the NSG associated to the compute | `string` | `""` | no |
 | <a name="input_database_backup_policy_level"></a> [database\_backup\_policy\_level](#input\_database\_backup\_policy\_level) | Backup policy level for Database ISCSI disks | `any` | n/a | yes |
