@@ -19,7 +19,7 @@ Environment=PGLOG=/u01/data/pgstartup.log
 EOF
 
 # Change password of postgres user
-sudo -u root bash -c "echo postgres:345database5678password0238 | chpasswd"
+sudo -u root bash -c "echo postgres:${pg_replicat_password} | chpasswd"
 
 # Setting firewall rules
 sudo -u root bash -c "firewall-cmd --permanent --zone=trusted --add-source=${pg_master_ip}/32"
