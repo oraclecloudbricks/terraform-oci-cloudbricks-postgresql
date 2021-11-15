@@ -68,6 +68,19 @@ resource "oci_core_instance" "postgresql_hotstandby1" {
     }
   }
 
+    dynamic "agent_config" {
+    for_each = var.bastion_service_enabled ? [1] : []
+    content {
+      are_all_plugins_disabled = false
+      is_management_disabled   = false
+      is_monitoring_disabled   = false
+      plugins_config {
+        desired_state = "ENABLED"
+        name          = "Bastion"
+      }
+    }
+  }
+
   fault_domain = var.postgresql_hotstandby1_fd
 
   create_vnic_details {
@@ -107,6 +120,19 @@ resource "oci_core_instance" "postgresql_hotstandby2" {
     content {
       ocpus         = var.postgresql_hotstandby_ocpus
       memory_in_gbs = var.postgresql_hotstandby_memory_in_gb
+    }
+  }
+
+    dynamic "agent_config" {
+    for_each = var.bastion_service_enabled ? [1] : []
+    content {
+      are_all_plugins_disabled = false
+      is_management_disabled   = false
+      is_monitoring_disabled   = false
+      plugins_config {
+        desired_state = "ENABLED"
+        name          = "Bastion"
+      }
     }
   }
 
