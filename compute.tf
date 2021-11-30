@@ -20,6 +20,13 @@ resource "oci_core_instance" "postgresql_master" {
     }
   }
 
+  agent_config {
+    plugins_config {
+      desired_state = "ENABLED"
+      name = "Bastion"
+    }
+  }
+
   fault_domain = var.postgresql_master_fd
 
   create_vnic_details {
@@ -52,6 +59,13 @@ resource "oci_core_instance" "postgresql_hotstandby1" {
     content {
       ocpus         = var.postgresql_hotstandby_ocpus
       memory_in_gbs = var.postgresql_hotstandby_memory_in_gb
+    }
+  }
+
+  agent_config {
+    plugins_config {
+      desired_state = "ENABLED"
+      name = "Bastion"
     }
   }
 
@@ -96,7 +110,14 @@ resource "oci_core_instance" "postgresql_hotstandby2" {
       memory_in_gbs = var.postgresql_hotstandby_memory_in_gb
     }
   }
-
+  
+  agent_config {
+    plugins_config {
+      desired_state = "ENABLED"
+      name = "Bastion"
+    }
+  }
+  
   fault_domain = var.postgresql_hotstandby2_fd
 
   create_vnic_details {
