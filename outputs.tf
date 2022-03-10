@@ -6,7 +6,6 @@
 
 output "PostgreSQL_Master" {
   description = "PostgreSQL Master Instance"
-  sensitive   = true
   value       = oci_core_instance.postgresql_master
 }
 
