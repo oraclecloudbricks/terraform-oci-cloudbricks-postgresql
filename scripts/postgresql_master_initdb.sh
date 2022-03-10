@@ -19,25 +19,12 @@ Environment=PGLOG=/u01/data/pgstartup.log
 EOF
 
 # Optionally initialize the database and enable automatic start:
-if [[ $pg_version == "9.6" ]]; then 
-	sudo su - postgres -c  "/usr/pgsql-${pg_version}/bin/initdb -D $DATA_DIR"
-	sudo semanage fcontext -a -t postgresql_db_t "/u01/data(/.*)?"
-	sudo restorecon -R -v /u01/data
-else
-	sudo su - postgres -c  "/usr/pgsql-${pg_version}/bin/initdb -D $DATA_DIR"
-	sudo semanage fcontext -a -t postgresql_db_t "/u01/data(/.*)?"
-	sudo restorecon -R -v /u01/data
-fi	
+sudo su - postgres -c  "/usr/pgsql-${pg_version}/bin/initdb -D $DATA_DIR"
+sudo semanage fcontext -a -t postgresql_db_t "/u01/data(/.*)?"
+sudo restorecon -R -v /u01/data
 
-#sudo systemctl enable postgresql-${pg_version}
-#sudo systemctl start postgresql-${pg_version}
-#sudo systemctl status postgresql-${pg_version}
 sudo systemctl enable postgresql
 sudo systemctl start postgresql
 sudo systemctl status postgresql
 
-if [[ $pg_version == "9.6" ]]; then 
-	sudo -u root bash -c "tail -5 /u01/data/pg_log/postgresql-*.log"
-else
-	sudo -u root bash -c "tail -5 /u01/data/log/postgresql-*.log"
-fi
+sudo -u root bash -c "tail -5 /u01/data/log/postgresql-*.log"
