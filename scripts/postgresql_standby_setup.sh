@@ -12,10 +12,11 @@ sudo chown -R postgres:postgres /u01
 sudo tee /etc/systemd/system/postgresql.service > /dev/null <<'EOF'
 .include /usr/lib/systemd/system/postgresql-${pg_version}.service
 [Service]
-
 # Location of database directory
 Environment=PGDATA=/u01/data
 Environment=PGLOG=/u01/data/pgstartup.log
+Restart=always
+RestartSec=3
 EOF
 
 # Change password of postgres user
